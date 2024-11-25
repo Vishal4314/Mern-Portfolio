@@ -1,0 +1,19 @@
+.card {
+    flex: 1 1 calc(33.33% - 20px); /* Each card takes up 33.33% of the row minus gap */
+    box-sizing: border-box; /* Ensures padding and border are included in the size */
+    max-width: calc(33.33% - 20px); /* Ensures a maximum width for each card */
+    margin: 10px 0; /* Optional: Adds vertical margin between rows */
+    background: #f5f5f5; /* Example styles */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to new rows */
+    justify-content: space-around; /* Distributes cards evenly with space */
+    align-items: center; /* Aligns items vertically in the container */
+    gap: 20px; /* Optional: Adds spacing between cards */
+  }
