@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "./Contact.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { ToastContainer, toast } from "react-toastify";
 
 const Contact = () => {
   const [inpVal, setInpVal] = useState({
-    fname: "",
-    lname: "",
+    fName: "",
+    lName: "",
     email: "",
     mobile: "",
     message: "",
@@ -23,8 +25,36 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const { fName, lName, email, mobile, message } = inpVal;
+    if (!fName || !lName || !email || !mobile) {
+      toast.error("Fill All the Details Please.");
+    } else if (!email.includes("@")) {
+      toast.error("Enter Valid Email");
+    } else {
+      const response = await fetch("http://localhost:8007/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fName, lName, email, mobile, message }),
+      });
+      const res = await response.json();
+      if (res.status === 201) {
+        toast.success("Your response is submitted, Thanks for reaching out.");
+        setInpVal({
+          ...inpVal,
+          fName: "",
+          lName: "",
+          email: "",
+          mobile: "",
+          message: "",
+        });
+      } else {
+        toast.error("Error while saving Response, Please Try again");
+      }
+    }
   };
 
   return (
@@ -37,7 +67,8 @@ const Contact = () => {
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
-                name="fname"
+                name="fName"
+                value={inpVal.fName}
                 onChange={handleInpChange}
               />
             </Form.Group>
@@ -45,7 +76,8 @@ const Contact = () => {
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
-                name="lname"
+                name="lName"
+                value={inpVal.lName}
                 onChange={handleInpChange}
               />
             </Form.Group>
@@ -54,6 +86,7 @@ const Contact = () => {
               <Form.Control
                 type="email"
                 name="email"
+                value={inpVal.email}
                 onChange={handleInpChange}
               />
             </Form.Group>
@@ -62,6 +95,7 @@ const Contact = () => {
               <Form.Control
                 type="text"
                 name="mobile"
+                value={inpVal.mobile}
                 onChange={handleInpChange}
               />
             </Form.Group>
@@ -71,6 +105,7 @@ const Contact = () => {
                 as="textarea"
                 rows={4}
                 name="message"
+                value={inpVal.message}
                 onChange={handleInpChange}
               />
             </Form.Group>
@@ -86,6 +121,7 @@ const Contact = () => {
               </Button>
             </div>
           </Form>
+          <ToastContainer />
         </div>
       </div>
     </>
